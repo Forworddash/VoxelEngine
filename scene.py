@@ -11,6 +11,3 @@ class Scene:
 
     def render(self):
         self.quad.render()
-
-    # def handle_events(self):
-    #     pass
