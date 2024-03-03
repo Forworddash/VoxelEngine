@@ -30,7 +30,7 @@ class VoxelEngine:
         pg.display.set_caption(f"{self.clock.get_fps() :.0f}")
 
     def render(self):
-        self.ctx.clear()
+        self.ctx.clear(color=BG_COLOR)
         pg.display.flip()
 
     def handle_events(self):
