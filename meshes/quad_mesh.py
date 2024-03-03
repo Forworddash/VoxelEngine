@@ -9,7 +9,7 @@ class QuadMesh(BaseMesh):
         self.ctx = app.ctx
         self.program = app.shader_program.quad
 
-        self.vbo_format = "3f 3f"
+        self.vbo_format = '3f 3f'
         self.attrs = ('in_position', 'in_color')
         self.vao = self.get_vao()
 
