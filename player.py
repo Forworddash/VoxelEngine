@@ -43,55 +43,5 @@ class Player(Camera):
         if key_state[pg.K_LCTRL]:
             self.move_down(current_speed)
 
-
-
-        # if key_state[pg.K_LSHIFT]:
-            # self.current_speed = runningVel
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def render(self):
+        pass

@@ -35,35 +35,3 @@ class World:
     def render(self):
         for chunk in self.chunks:
             chunk.render()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
