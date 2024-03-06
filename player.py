@@ -6,12 +6,25 @@ from settings import *
 class Player(Camera):
     def __init__(self, app, position=PLAYER_POS, yaw=-90, pitch=0):
         self.app = app
+        self.velocity = glm.vec3(0.0, 0.0, 0.0) # initial velocity
         super().__init__(position, yaw, pitch)
 
     def update(self):
         self.keyboard_control()
+        self.apply_gravity() # method to apply gravity to player
+        self.move() # method to move player based on velocity
         self.mouse_control()
         super().update()
+
+    def apply_gravity(self):
+        if self.position.y > 0:
+            self.velocity.y -= GRAVITY * self.app.delta_time
+        
+    def move(self):
+        self.position += self.velocity * self.app.delta_time
+        if self.position.y <= 0:
+            self.position.y = 0
+            self.velocity.y = 0
 
     def mouse_control(self):
         mouse_dx, mouse_dy = pg.mouse.get_rel()
@@ -38,8 +51,9 @@ class Player(Camera):
             self.move_up(current_speed)
         if key_state[pg.K_e]:
             self.move_down(current_speed)
-        if key_state[pg.K_SPACE]:
-            self.move_up(current_speed)
+        if key_state[pg.K_SPACE] and self.position.y == 0:
+            # self.move_up(current_speed)
+            self.velocity.y = JUMP_POWER * self.app.delta_time
         if key_state[pg.K_LCTRL]:
             self.move_down(current_speed)
 
