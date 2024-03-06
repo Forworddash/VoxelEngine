@@ -7,14 +7,20 @@ class Player(Camera):
     def __init__(self, app, position=PLAYER_POS, yaw=-90, pitch=0):
         self.app = app
         self.velocity = glm.vec3(0.0, 0.0, 0.0) # initial velocity
+        self.size = glm.vec3(PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_DEPTH)  # Define player's bounding box size
         super().__init__(position, yaw, pitch)
 
     def update(self):
         self.keyboard_control()
         self.apply_gravity() # method to apply gravity to player
         self.move() # method to move player based on velocity
+        self.check_collision() # method to check for collision
         self.mouse_control()
+        self.current_position()
         super().update()
+
+    def current_position(self):
+        print(self.position)
 
     def apply_gravity(self):
         if self.position.y > 0:
@@ -25,6 +31,34 @@ class Player(Camera):
         if self.position.y <= 0:
             self.position.y = 0
             self.velocity.y = 0
+
+    def handle_event(self, event):
+        # adding and removing voxels with clicks
+        if event.type == pg.MOUSEBUTTONDOWN:
+            voxel_handler = self.app.scene.world.voxel_handler
+            if event.button == 1:
+                voxel_handler.set_voxel()
+            if event.button == 3:
+                voxel_handler.switch_mode()
+
+    def check_collision(self):
+        player_chunk_x = int(self.position.x / CHUNK_SIZE)
+        player_chunk_z = int(self.position.z / CHUNK_SIZE)
+        player_chunk_y = int(self.position.y / CHUNK_SIZE)
+
+        for dx in range(-1, 2):
+            for dy in range(-1, 2):
+                for dz in range(-1, 2):
+                    chunk_x = player_chunk_x + dx
+                    chunk_y = player_chunk_y + dy
+                    chunk_z = player_chunk_z + dz
+                    
+                    # if (chunk_x, chunk_y, chunk_z) in self.world.loaded_chunks:
+                    #     chunk = self.world.loaded_chunks[(chunk_x, chunk_y, chunk_z)]
+                    #     if chunk.is_solid(self.position):
+                    #         # Handle collision (e.g., stop player's movement)
+                    #         self.velocity = glm.vec3(0.0, 0.0, 0.0)
+                    #         return  
 
     def mouse_control(self):
         mouse_dx, mouse_dy = pg.mouse.get_rel()
