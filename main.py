@@ -43,6 +43,11 @@ class VoxelEngine:
         self.player.update()
         self.shader_program.update()
         self.scene.update()
+        for chunk in self.scene.world.chunks:
+            if chunk.is_empty:  # Skip empty chunks
+                continue
+            if chunk.check_collision(self.player):
+                return True
         self.delta_time = self.clock.tick()
         self.time = pg.time.get_ticks() * 0.001
         pg.display.set_caption(f'{self.clock.get_fps() :.0f}')

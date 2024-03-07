@@ -16,15 +16,22 @@ class Player(Camera):
         self.apply_gravity() # method to apply gravity to player
         self.move() # method to move player based on velocity
         self.mouse_control()
+        for chunk in self.app.scene.world.chunks:
+            if chunk.check_collision(self):
+                # Handle collision (e.g., stop player movement)
+                pass
         super().update()
 
     def current_position(self):
         print(self.position)
 
+    
 
     def apply_gravity(self):
         if self.position.y > 0:
             self.velocity.y -= GRAVITY * self.app.delta_time
+     
+            
 
     def move(self):
         self.position += self.velocity * self.app.delta_time
