@@ -36,7 +36,7 @@ class Chunk:
         if (chunk_min.x < player_max.x and chunk_max.x > player_min.x and
             chunk_min.y < player_max.y and chunk_max.y > player_min.y and
             chunk_min.z < player_max.z and chunk_max.z > player_min.z):
-            print("Collision detected")
+            # print("Collision detected")
             return True
         return False
 

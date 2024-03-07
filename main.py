@@ -47,6 +47,7 @@ class VoxelEngine:
             if chunk.is_empty:  # Skip empty chunks
                 continue
             if chunk.check_collision(self.player):
+                print("Collision detected")
                 return True
         self.delta_time = self.clock.tick()
         self.time = pg.time.get_ticks() * 0.001
