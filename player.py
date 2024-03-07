@@ -11,30 +11,21 @@ class Player(Camera):
         super().__init__(position, yaw, pitch)
 
     def update(self):
+        self.current_position()
         self.keyboard_control()
         self.apply_gravity() # method to apply gravity to player
         self.move() # method to move player based on velocity
         self.mouse_control()
-        self.current_position()
         super().update()
 
     def current_position(self):
         print(self.position)
 
+
     def apply_gravity(self):
         if self.position.y > 0:
             self.velocity.y -= GRAVITY * self.app.delta_time
 
-    # create a method to check for colision between player and a voxel
-    def collision(self, voxel):
-        # check for collision between player and voxel
-        if self.position.x < voxel.position.x + 1 and self.position.x + 1 > voxel.position.x and self.position.y < voxel.position.y + 1 and self.position.y + 1 > voxel.position.y and self.position.z < voxel.position.z + 1 and self.position.z + 1 > voxel.position.z:
-            print("collision")
-            return True
-        return False                    
-
-
-        
     def move(self):
         self.position += self.velocity * self.app.delta_time
         if self.position.y <= 0:
@@ -49,7 +40,6 @@ class Player(Camera):
                 voxel_handler.set_voxel()
             if event.button == 3:
                 voxel_handler.switch_mode()
-
 
     def mouse_control(self):
         mouse_dx, mouse_dy = pg.mouse.get_rel()
