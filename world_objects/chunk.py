@@ -20,25 +20,24 @@ class Chunk:
         m_model = glm.translate(glm.mat4(), glm.vec3(self.position) * CHUNK_SIZE)
         return m_model
 
-    def check_collision(self, player):
+    # def check_collision(self, player):
         # Get the boundaries of the chunk
-        chunk_min = glm.vec3(self.position) * CHUNK_SIZE
-        chunk_max = chunk_min + glm.vec3(CHUNK_SIZE)
+        # chunk_min = glm.vec3(self.position) * CHUNK_SIZE
+        # chunk_max = chunk_min + glm.vec3(CHUNK_SIZE)
 
+        # # Get the boundaries of the player
+        # player_min = player.position - player.size / 2
+        # player_max = player.position + player.size / 2
 
-        # Get the boundaries of the player
-        player_min = player.position - player.size / 2
-        player_max = player.position + player.size / 2
-
-     
-
-        # Check for collision
-        if (chunk_min.x < player_max.x and chunk_max.x > player_min.x and
-            chunk_min.y < player_max.y and chunk_max.y > player_min.y and
-            chunk_min.z < player_max.z and chunk_max.z > player_min.z):
-            # print("Collision detected")
-            return True
-        return False
+        # # Check for collision
+        # if (chunk_min.x < player_max.x and chunk_max.x > player_min.x and
+        #     chunk_min.y < player_max.y and chunk_max.y > player_min.y and
+        #     chunk_min.z < player_max.z and chunk_max.z > player_min.z):
+        #     # turn the chunk red so I can see it 
+        #     self.app.scene.world.voxels[self.position] = 255
+        #     print(f"Chunk min {chunk_min} chunk max {chunk_max} collided with player at player min {player_min} player max {player_max}")            
+        #     return True
+        # return False
 
     def set_uniform(self):
         self.mesh.program['m_model'].write(self.m_model)

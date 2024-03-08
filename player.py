@@ -14,24 +14,38 @@ class Player(Camera):
         self.current_position()
         self.keyboard_control()
         self.apply_gravity() # method to apply gravity to player
+        self.collision_detection() # method to detect collision with other objects
         self.move() # method to move player based on velocity
         self.mouse_control()
-        for chunk in self.app.scene.world.chunks:
-            if chunk.check_collision(self):
-                # Handle collision (e.g., stop player movement)
-                pass
         super().update()
 
     def current_position(self):
         print(self.position)
 
-    
+
 
     def apply_gravity(self):
         if self.position.y > 0:
             self.velocity.y -= GRAVITY * self.app.delta_time
      
-            
+    def collision_detection(self):
+        # Get the boundaries of the player
+        player_min = self.position - self.size / 2
+        player_max = self.position + self.size / 2
+
+        # Loop through all chunks in the world
+        for chunk in self.app.scene.world.chunks:
+            # Get the boundaries of the chunk
+            chunk_min = chunk.position - glm.vec3(CHUNK_SIZE / 2)
+            chunk_max = chunk.position + glm.vec3(CHUNK_SIZE / 2)
+
+            # Check for collision between player and chunk
+            if (player_min.x < chunk_max.x and player_max.x > chunk_min.x and
+                player_min.y < chunk_max.y and player_max.y > chunk_min.y and
+                player_min.z < chunk_max.z and player_max.z > chunk_min.z):
+                # Collision detected, handle collision here
+                print('detected')
+                pass
 
     def move(self):
         self.position += self.velocity * self.app.delta_time
