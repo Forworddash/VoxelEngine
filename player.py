@@ -5,18 +5,35 @@ from settings import *
 
 class Player(Camera):
     def __init__(self, app, position=PLAYER_POS, yaw=-90, pitch=0):
+        super().__init__(position, yaw, pitch)
+        
         self.app = app
         self.velocity = glm.vec3(0.0, 0.0, 0.0) # initial velocity
         self.size = glm.vec3(PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_DEPTH)  # Define player's bounding box size
         self.texture = pg.image.load(PLAYER_TEXTURE_PATH).convert_alpha()  # Load player texture
-        super().__init__(position, yaw, pitch)
+        
+        # Define vertices of the bounding box relative to player position
+        self.bounding_box_vertices = [
+            (self.position.x - PLAYER_WIDTH / 2, self.position.y - PLAYER_HEIGHT / 2),
+            (self.position.x + PLAYER_WIDTH / 2, self.position.y - PLAYER_HEIGHT / 2),
+            (self.position.x + PLAYER_WIDTH / 2, self.position.y + PLAYER_HEIGHT / 2),
+            (self.position.x - PLAYER_WIDTH / 2, self.position.y + PLAYER_HEIGHT / 2),
+        ]
 
     def update(self):
+        # Update bounding box vertices based on current position
+        self.bounding_box_vertices = [
+            (self.position.x - PLAYER_WIDTH / 2, self.position.y - PLAYER_HEIGHT / 2),
+            (self.position.x + PLAYER_WIDTH / 2, self.position.y - PLAYER_HEIGHT / 2),
+            (self.position.x + PLAYER_WIDTH / 2, self.position.y + PLAYER_HEIGHT / 2),
+            (self.position.x - PLAYER_WIDTH / 2, self.position.y + PLAYER_HEIGHT / 2),
+        ]
         self.current_position()
         self.keyboard_control()
         self.apply_gravity() # method to apply gravity to player
         self.move() # method to move player based on velocity
         self.mouse_control()
+
         super().update()
 
     def current_position(self):
@@ -75,8 +92,16 @@ class Player(Camera):
             self.move_down(current_speed)
 
     def render(self, screen):
-        player_rect = self.texture.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+        # Calculate the position of the player texture based on its actual position
+        player_rect = self.texture.get_rect(center=(int(self.position.x), int(self.position.y)))
+        
+        # Blit the player texture onto the screen at the calculated position
         screen.blit(self.texture, player_rect)
+
+        # Draw bounding box
+        bounding_box_points = [(int(x), int(y)) for x, y in self.bounding_box_vertices]
+        pg.draw.lines(screen, (255, 0, 0), True, bounding_box_points, 2)
+
 
         # Call super to render camera (if needed)
         super().render(screen)

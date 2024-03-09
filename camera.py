@@ -8,6 +8,10 @@ class Camera:
         self.yaw = glm.radians(yaw)
         self.pitch = glm.radians(pitch)
 
+        # self.position = CAMERA_POSITION
+        # self.yaw = glm.radians(CAMERA_YAW)
+        # self.pitch = glm.radians(CAMERA_PITCH)
+
         self.up = glm.vec3(0, 1, 0)
         self.right = glm.vec3(1, 0, 0)
         self.forward = glm.vec3(0, 0, -1)
