@@ -8,13 +8,13 @@ class Player(Camera):
         self.app = app
         self.velocity = glm.vec3(0.0, 0.0, 0.0) # initial velocity
         self.size = glm.vec3(PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_DEPTH)  # Define player's bounding box size
+        self.texture = pg.image.load(PLAYER_TEXTURE_PATH).convert_alpha()  # Load player texture
         super().__init__(position, yaw, pitch)
 
     def update(self):
         self.current_position()
         self.keyboard_control()
         self.apply_gravity() # method to apply gravity to player
-        self.collision_detection() # method to detect collision with other objects
         self.move() # method to move player based on velocity
         self.mouse_control()
         super().update()
@@ -23,29 +23,10 @@ class Player(Camera):
         print(self.position)
 
 
-
     def apply_gravity(self):
         if self.position.y > 0:
             self.velocity.y -= GRAVITY * self.app.delta_time
-     
-    def collision_detection(self):
-        # Get the boundaries of the player
-        player_min = self.position - self.size / 2
-        player_max = self.position + self.size / 2
 
-        # Loop through all chunks in the world
-        for chunk in self.app.scene.world.chunks:
-            # Get the boundaries of the chunk
-            chunk_min = chunk.position - glm.vec3(CHUNK_SIZE / 2)
-            chunk_max = chunk.position + glm.vec3(CHUNK_SIZE / 2)
-
-            # Check for collision between player and chunk
-            if (player_min.x < chunk_max.x and player_max.x > chunk_min.x and
-                player_min.y < chunk_max.y and player_max.y > chunk_min.y and
-                player_min.z < chunk_max.z and player_max.z > chunk_min.z):
-                # Collision detected, handle collision here
-                print('detected')
-                pass
 
     def move(self):
         self.position += self.velocity * self.app.delta_time
@@ -93,5 +74,9 @@ class Player(Camera):
         if key_state[pg.K_LCTRL]:
             self.move_down(current_speed)
 
-    def render(self):
-        pass
+    def render(self, screen):
+        player_rect = self.texture.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+        screen.blit(self.texture, player_rect)
+
+        # Call super to render camera (if needed)
+        super().render(screen)
